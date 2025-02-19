@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  creationTimestamp: null
+  name: vote
+spec:
+  ingressClassName: azure-application-gateway
+  rules:
+  - host: cibg-cluster.westeurope.cloudapp.azure.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: vote
+            port:
+              number: 8080
+        path: /
+        pathType: Exact
+  tls:
+  - hosts:
+    - cibg-cluster.westeurope.cloudapp.azure.com
+    secretName: vote-secret
+status:
+  loadBalancer: {}
